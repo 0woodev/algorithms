@@ -16,7 +16,7 @@ class Solution {
     }
 
     public int[] solution(int n) {
-        int[][] DIRS = {{0, 1}, {1, 0}}; // South, East
+        int[][] DIRS = {{0, 1}, {1, 0}, {-1, -1}}; // South, East
 
         int[][] triangle = new int[n + 1][n + 1];
         for (int[] row : triangle) {
@@ -25,65 +25,35 @@ class Solution {
 
         printTriangle(triangle, n);
 
-        // TODO 1 triangle 을 달팽이 방향으로 채운다
         int posX = 0, posY = 0;
         int num = 1;
 
-
+        int d = 0;
         while (true) {
-            // 1. 채운다
-            triangle[posY][posX] = num++;
+            if (isInBound(posX, posY, n) && triangle[posY][posX] == NOT_INIT) {
+                triangle[posY][posX] = num++;
+            } else {
+                break;
+            }
+
             printTriangle(triangle, n);
-            boolean move = false;
-            // 2-1. 아래와 오른쪽방향으로 이동한다
-            for (int d = 0; d < DIRS.length; d++) {
-                int[] dir = DIRS[d];
+
+            int[] dir = DIRS[d];
+            while (true) {
                 int nextY = posY + dir[Y];
                 int nextX = posX + dir[X];
 
                 if (isInBound(nextX, nextY, n) && triangle[nextY][nextX] == NOT_INIT) {
-                    posX = nextX;
                     posY = nextY;
-                    move = true;
+                    posX = nextX;
+                    triangle[posY][posX] = num++;
+                    printTriangle(triangle, n);
+                } else {
+                    d = (d + 1) % 3;
+                    posY += DIRS[d][Y];
+                    posX += DIRS[d][X];
                     break;
                 }
-
-            }
-
-            // 2-2. 대각선 방향으로 이동해야하는지 확인
-            if (!move) {
-                // Move NorthWest
-                int[] dir = new int[]{-1, -1};
-
-                while (true) {
-                    int nextY = posY + dir[Y];
-                    int nextX = posX + dir[X];
-
-                    if (!isInBound(nextX, nextY, n)) break;
-
-                    if (triangle[nextY][nextX] == NOT_INIT) {
-                        posY = nextY;
-                        posX = nextX;
-                        triangle[posY][posX] = num++;
-                        printTriangle(triangle, n);
-                    } else {
-                        // 대각선 방향으로 쭉 이동 중 더이상 이동하지 못하는 경우
-                        // 아래로 내려갈 수 있는지 체크
-                        nextY = posY + 1;
-                        nextX = posX;
-                        if (isInBound(nextX, nextY, n) && triangle[nextY][nextX] == NOT_INIT) {
-                            posY = nextY;
-                            posX = nextX;
-                            move = true;
-                        }
-                        break;
-                    }
-                }
-            }
-
-            // 3. 아래, 오른쪽, 대각선 모든 방향으로 못 움직이면 종료
-            if (!move) {
-                break;
             }
         }
 
@@ -104,7 +74,7 @@ class Solution {
 
         Solution solution = new Solution();
 
-        int[] inputs = new int[]{1, 2};
+        int[] inputs = new int[]{9};
 
         for (int i = 0; i < inputs.length; i++) {
             int n = inputs[i];
