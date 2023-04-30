@@ -11,4 +11,10 @@ public class PhoneNumber {
     public String toString() {
         return "PhoneNumber{phoneNumber='" + this.phoneNumber + "'}";
     }
+
+    public static void main(String[] args) {
+        System.out.println(new PhoneNumber("010-1234-5678"));
+        System.out.println(new PhoneNumber("010 1234 5678"));
+        System.out.println(new PhoneNumber("01012345678"));
+    }
 }
