@@ -5,11 +5,10 @@ def time_to_min(time):
     return hour * 60 + minute
 
 def get_price(record,def_time, def_price, unit_time, unit_price):
-    stay, price = 0, 0
+    price = 0
+    stay = sum(record['OUT']) - sum(record['IN'])
     if len(record['IN']) > len(record['OUT']):
-        record['OUT'].append(23*60+59)
-    for i in range(len(record['IN'])):
-        stay += record['OUT'][i] - record['IN'][i]
+        stay += 23*60+59
     if stay > def_time:
         price += (ceil((stay-def_time)/unit_time) * unit_price)    
     price += def_price
@@ -25,6 +24,9 @@ def solution(fees, records):
             parking[number][inout].append(minute)
         else: 
             parking[number] = {"IN":[minute], "OUT":[]}
+    
     for key,item in parking.items():
+        print(key, item)
         answer.append([key,get_price(item,*fees)])
+    print(answer)
     return list(map(lambda x:x[1], sorted(answer)))
