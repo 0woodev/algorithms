@@ -1,4 +1,4 @@
-//정확성 100  효율성 0
+//정확성 15/15 효율성 4/15
 function solution(gems) {
     var answer = [0, 0];
     let gemList = {};
@@ -32,16 +32,13 @@ function solution(gems) {
                 answer[0] = start + 1;
                 answer[1] = end + 1;
                 min = end - start;
-                start = start + 1;
-                end = start;
-                buyList = {};
-                buyList[gems[start]] = 1; 
+                delete buyList[gems[start]];
+                start++;
+                
             }
             else {
-            start = start + 1;
-            end = start;
-            buyList = {};
-            buyList[gems[start]] = 1; 
+                delete buyList[gems[start]];
+                start++;
             }
         }
         else {
