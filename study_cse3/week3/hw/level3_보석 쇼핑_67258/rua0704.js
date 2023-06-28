@@ -1,4 +1,5 @@
-//정확성 15/15 효율성 4/15
+// 정확성 15/15 효율성 15/15
+// Object.Keys().length가 Keys들을 불러와서 그런지 시간을 많이 잡아먹나보다 상수로 관리하니 바로 통과;;;
 function solution(gems) {
     var answer = [0, 0];
     let gemList = {};
@@ -20,9 +21,10 @@ function solution(gems) {
         }
     }
 
+    let buyCount = Object.keys(buyList).length;
+    
     while(start <= end && end < gems.length) {
-        let buyCount = Object.keys(buyList).length;
-        // console.log(buyList);
+        
         if(buyCount === gemCount) {
             if(buyList[gems[start]] > 1) {
                 buyList[gems[start]]--;
@@ -34,17 +36,20 @@ function solution(gems) {
                 min = end - start;
                 delete buyList[gems[start]];
                 start++;
+                buyCount--;
                 
             }
             else {
                 delete buyList[gems[start]];
                 start++;
+                buyCount--;
             }
         }
         else {
             end++;
             if(!buyList[gems[end]]) {
                 buyList[gems[end]] = 1;
+                buyCount++;
             }   
             else {
                 buyList[gems[end]]++;
